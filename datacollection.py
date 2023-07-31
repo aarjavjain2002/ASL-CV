@@ -18,7 +18,7 @@ offset = 20
 fixed_img_dimension = 500
 
 #* Defining the location to save the training data
-folder = "Data/Y"
+folder = "Data/U"
 
 #* Counter to keep track of the number of images
 counter = 0
