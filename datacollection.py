@@ -33,6 +33,9 @@ while True:
     #- Reading the image
     success, img = cam.read() 
 
+    #- Creating a copy of the image
+    img_output = img.copy()
+
     #- This identifies the hands in the image and draws the landmarks on it
     #- It saves the hands it recogizes in an array called hands
     hands, img = detector.findHands(img) 
@@ -74,7 +77,7 @@ while True:
 
             #! Giving the image to the Classifier to predict the label
             #- The getPrediction returns the label and index of the label
-            prediction, index = classifier.getPrediction(img_white)
+            prediction, index = classifier.getPrediction(img_white, draw = False)
 
             #- Printing the result
             print(prediction, index)
@@ -96,16 +99,21 @@ while True:
 
             #! Giving the image to the Classifier to predict the label
             #- The getPrediction returns the label and index of the label
-            prediction, index = classifier.getPrediction(img_white)
+            prediction, index = classifier.getPrediction(img_white, draw = False)
 
             #- Printing the result
             print(prediction, index)
         
-        #- Showing the cropped image on screen
+        #* Putting the text and rectangle on the image
+        cv2.putText(img_output, labels[index], (x, y-offset), cv2.FONT_HERSHEY_PLAIN, 5, (0, 255, 0), 5)
+        cv2.rectangle(img_output, (x-offset,y-offset), (x+w+offset, y+h+offset), (255, 0, 255), 4)
+        
+        
+        #* Showing the cropped image on screen
         cv2.imshow("Image Crop", img_crop)
         cv2.imshow("Image White", img_white)
 
     #* Showing the image (webcam really) on screen
-    cv2.imshow("Image", img) 
+    cv2.imshow("Image", img_output) 
     #- 1 millisecond delay between frames
-    cv2.waitKey(1) 
+    cv2.waitKey(1)
