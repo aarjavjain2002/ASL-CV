@@ -1,5 +1,6 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
+from cvzone.ClassificationModule import Classifier
 import numpy as np
 import math
 import time
@@ -11,17 +12,20 @@ cam = cv2.VideoCapture(1)
 #* Hand detector object
 detector = HandDetector(maxHands=1)
 
-#* Offset value for the cropped image
+#- Offset value for the cropped image
 offset = 20
 
-#* Fixed image size
+#- Fixed image size
 fixed_img_dimension = 500
 
 #* Defining the location to save the training data
 folder = "Data/U"
 
-#* Counter to keep track of the number of images
-counter = 0
+#* Classifier Object -> We are giving the classifier the model and the label files we got from Teachable Machine
+classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
+
+#* Labels for the classifier
+labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
 
 #* The following loop runs the camera (displays on screen)
 while True:
@@ -68,11 +72,12 @@ while True:
             #- img_white[height, width] -> height and  width where we want to put the image
             img_white[: , width_gap : width_gap + new_width] = resized_img #- Height is the same, Width = gap from left TO gap from left + new width
 
-            #! We are not using the following code because it puts the image in the top left corner
-            #! This is for reference only
-            #- img_crop.shape[0] -> height of the cropped image
-            #- img_crop.shape[1] -> width of the cropped image
-            # img_white[0:resized_img.shape[0], 0:resized_img.shape[1]] = resized_img
+            #! Giving the image to the Classifier to predict the label
+            #- The getPrediction returns the label and index of the label
+            prediction, index = classifier.getPrediction(img_white)
+
+            #- Printing the result
+            print(prediction, index)
         
         #* Width > Height
         if aspect_ratio <= 1:
@@ -88,6 +93,13 @@ while True:
 
             #- img_white[height, width] -> height and  width where we want to put the image
             img_white[height_gap: height_gap + new_height , :] = resized_img #- Height is the same, Width = gap from left TO gap from left + new width
+
+            #! Giving the image to the Classifier to predict the label
+            #- The getPrediction returns the label and index of the label
+            prediction, index = classifier.getPrediction(img_white)
+
+            #- Printing the result
+            print(prediction, index)
         
         #- Showing the cropped image on screen
         cv2.imshow("Image Crop", img_crop)
@@ -95,14 +107,5 @@ while True:
 
     #* Showing the image (webcam really) on screen
     cv2.imshow("Image", img) 
-
     #- 1 millisecond delay between frames
-    key = cv2.waitKey(1) 
-
-    #* Saving using the 's' keys
-    if key == ord("s"):
-        counter += 1
-        cv2.imwrite(f"{folder}/Image_{time.time()}.jpg", img_white) #- We are storing the image with a unique name (time.time())
-        print(counter)
-        if counter == 150:
-            exit()
+    cv2.waitKey(1) 
