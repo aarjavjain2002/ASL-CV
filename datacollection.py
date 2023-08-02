@@ -18,7 +18,7 @@ offset = 20
 fixed_img_dimension = 500
 
 #* Defining the location to save the training data
-folder = "Data/U"
+folder = "Data/W"
 
 #* Counter to keep track of the number of images
 counter = 0
@@ -104,5 +104,3 @@ while True:
         counter += 1
         cv2.imwrite(f"{folder}/Image_{time.time()}.jpg", img_white) #- We are storing the image with a unique name (time.time())
         print(counter)
-        if counter == 150:
-            exit()
