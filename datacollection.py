@@ -27,6 +27,11 @@ classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
 #* Labels for the classifier
 labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y"]
 
+#* Counter for frames
+counter = 0
+correct = 0
+desired_letter = "C"
+
 #* The following loop runs the camera (displays on screen)
 while True:
     #* All the important stuff happens in this loop
@@ -116,4 +121,13 @@ while True:
     #* Showing the image (webcam really) on screen
     cv2.imshow("Image", img_output) 
     #- 1 millisecond delay between frames
-    cv2.waitKey(1)
+    key = cv2.waitKey(1)
+
+    if key == ord('s'):
+        if counter == 100:
+            break
+        if labels[index] == desired_letter:
+            correct += 1
+        counter += 1
+
+print(correct)
