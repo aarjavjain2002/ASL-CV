@@ -30,7 +30,7 @@ labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", 
 #* Counter for frames
 counter = 0
 correct = 0
-desired_letter = "C"
+desired_letter = "Y"
 
 #* The following loop runs the camera (displays on screen)
 while True:
